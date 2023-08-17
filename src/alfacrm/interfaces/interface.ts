@@ -21,14 +21,14 @@ export interface CustomerResponseItems {
     teacher_ids:number[];
     name: string;
     color: number | null;
-    study_status_id:  number | null,
-    lead_status_id:  number | null,
+    study_status_id: number | null,
+    lead_status_id: number | null,
     lead_reject_id: number | null,
-    lead_source_id:  number | null,
-    assigned_id :  number | null,
-    legal_type:  number | null,
+    lead_source_id: number | null,
+    assigned_id : number | null,
+    legal_type: number | null,
     legal_name: string;
-    company_id:  number | null,
+    company_id: number | null,
     dob: string;
     balance: string;
     balance_bonus: number
@@ -39,7 +39,7 @@ export interface CustomerResponseItems {
     b_date: Date;
     e_date: string;
     note: string;
-    paid_lesson_count:  number | null,
+    paid_lesson_count: number | null,
     paid_lesson_date: Date;
     phone: string[];
     email: string[];
@@ -52,8 +52,22 @@ export interface CustomerResponseItems {
     custom_zhdutgruppu: string;
 }
 
-export interface FromatCustomersData {
+
+export interface PayResponseItems {
     id: number;
+    location_id: number | null,
+    customer_id: number | null,
+    employee_id: number | null,
+    pay_item_category_id: number | null,
+    pay_type_id: number | null,
+    pay_item_id: number | null,
+    pay_account_id: number | null,
+    commodity_id: number | null,
+    payer_name: string
     note: string;
-    create_date_time?: string;
-}
+    is_confirmed: number;
+    group_ids: number[];
+    is_fiscal: number;
+    document_date: string
+    income: string
+  }

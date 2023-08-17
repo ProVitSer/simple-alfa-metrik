@@ -1,7 +1,7 @@
 import 'dotenv/config'
 import axios, {  RawAxiosRequestHeaders } from 'axios';
-import { ApiVersion, RESTUrlPath } from './interfaces/enum';
-import { LoginRequestData, LoginresponseData } from './interfaces/interface';
+import { ApiMethod, ApiVersion, RESTUrlPath } from './interfaces/enum';
+import { BaseResponse, CustomerResponseItems, LoginRequestData, LoginresponseData } from './interfaces/interface';
 
 export class AlfaCrm {
     private static url = process.env.ALFACRM_URL
@@ -26,7 +26,6 @@ export class AlfaCrm {
             api_key: process.env.ALFACRM_API_KEY
         }
     }
-
 
     public async request<T>(urlPath: string, data: {[key: string]: any}): Promise<T>{
         try{

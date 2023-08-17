@@ -1,6 +1,7 @@
 export enum RESTUrlPath {
     login = '/auth/login',
     customer = '/customer/',
+    pay = '/pay/'
 } 
 
 export enum ApiVersion {

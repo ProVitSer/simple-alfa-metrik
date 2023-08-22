@@ -68,6 +68,6 @@ export interface PayResponseItems {
     is_confirmed: number;
     group_ids: number[];
     is_fiscal: number;
-    document_date: string
+    document_date: Date
     income: string
   }

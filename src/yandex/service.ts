@@ -11,7 +11,7 @@ export class YandexMetrikaService {
 
     public async sendSimpleOrders(data: YMSendSimpleOrdersData[]){
         const csvFileName = `ym-${moment().format('DD.MM.YYYY')}.csv`;        
-         await this.toCSV(data, csvFileName);
+        await this.toCSV(data, csvFileName);
         const formData = this.formData(csvFileName);
         await this.ym.request(formData)
     }

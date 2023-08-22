@@ -1,7 +1,7 @@
 import 'dotenv/config'
 import axios, {  RawAxiosRequestHeaders } from 'axios';
-import { ApiMethod, ApiVersion, RESTUrlPath } from './interfaces/enum';
-import { BaseResponse, CustomerResponseItems, LoginRequestData, LoginresponseData } from './interfaces/interface';
+import { ApiVersion, RESTUrlPath } from './interfaces/enum';
+import { LoginRequestData, LoginresponseData } from './interfaces/interface';
 
 export class AlfaCrm {
     private static url = process.env.ALFACRM_URL

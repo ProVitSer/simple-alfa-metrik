@@ -3,42 +3,36 @@ import { ApiVersion, RESTUrlPath, ApiMethod } from "./interfaces/enum";
 import { CustomerResponseItems, BaseResponse, PayResponseItems } from "./interfaces/interface";
 
 export class AlfaService {
-    public async getAlfaCustomesData(): Promise<CustomerResponseItems[]> {
-        const alfaCrm = await AlfaCrm.factory();
-        const customerItems: CustomerResponseItems[] = [];
-        let countCustomer: number = 0;
-        let page: number = 0;
-        async function getCustomer(page: number){
-            const response = await alfaCrm.request<BaseResponse<CustomerResponseItems>>(`${process.env.ALFACRM_URL}${ApiVersion.v2}${RESTUrlPath.customer}${ApiMethod.index}`, { page });
-            countCustomer += response.count;
-            customerItems.push(...response.items);
-            if(countCustomer < response.total){
-                page++;
-                await getCustomer(page);
-            }
-    
-        }
-        await getCustomer(page);
-        return customerItems;
+    public async getAlfaCustomesData(dateFrom: string): Promise<CustomerResponseItems[]> {
+        return await this.requestByPage<CustomerResponseItems>(`${process.env.ALFACRM_URL}${ApiVersion.v2}${RESTUrlPath.customer}${ApiMethod.index}`, { date_from: dateFrom })
     }
 
-    public async getAlfaPayData(customerId: number){
+    public async getAlfaPayData(dateFrom: string):Promise<PayResponseItems[]>{
+        return await this.requestByPage<PayResponseItems>(`${process.env.ALFACRM_URL}${ApiVersion.v2}${RESTUrlPath.pay}${ApiMethod.index}`, { date_from: dateFrom })
+    }
+
+    public async getCustomerById(customerId: number): Promise<CustomerResponseItems[]> {
         const alfaCrm = await AlfaCrm.factory();
-        const payItems: PayResponseItems[] = [];
-        let countPay: number = 0;
+        const response = await alfaCrm.request<BaseResponse<CustomerResponseItems>>(`${process.env.ALFACRM_URL}${ApiVersion.v2}${RESTUrlPath.customer}${ApiMethod.index}`, { id: customerId });
+        return response.items;
+    }
+    
+    private async requestByPage<T>(urlPath: string, filter?: { [key: string]: any }): Promise<T[]>{
+        const alfaCrm = await AlfaCrm.factory();
+        const payItems: T[] = [];
+        let count: number = 0;
         let page: number = 0;
-        async function getPay(page: number){
-            const response = await alfaCrm.request<BaseResponse<PayResponseItems>>(`${process.env.ALFACRM_URL}${ApiVersion.v2}${RESTUrlPath.pay}${ApiMethod.index}`, { page, customer_id: customerId });
-            countPay += response.count;
+        async function request(page: number){
+            const response = await alfaCrm.request<BaseResponse<T>>(urlPath, { page, ...filter });
+            count += response.count;
             payItems.push(...response.items);
-            if(countPay < response.total){
+            if(count < response.total){
                 page++;
-                await getPay(page);
+                await request(page);
             }
     
         }
-        await getPay(page);
+        await request(page);
         return payItems;
     }
-    
 }

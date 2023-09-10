@@ -20,9 +20,10 @@ class AppService {
     }
 
     private async formatToYMData(payData: PayResponseItems[]): Promise<YMSendSimpleOrdersData[]>{
-        if(payData.length == 0) return [];
+        const filterPay = payData.filter((p: PayResponseItems) =>  p.customer_id !== null)
+        if(filterPay.length == 0) return [];
         const ymData: YMSendSimpleOrdersData[]= [];
-        for(const pay of payData){
+        for(const pay of filterPay){
             const customer = await this.alfaService.getCustomerById(pay.customer_id);
             if(customer.length == 0) continue;
             ymData.push(this.formatToYM(pay, customer[0]))

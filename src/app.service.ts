@@ -12,22 +12,36 @@ export class AppService {
     constructor() {}
 
     public async sendCustomerInfoToMetrika(){
+
         const payData = await this.alfaService.getAlfaPayData(this.yesterday.format('DD.MM.YYYY'));
+
         if(payData.length == 0) return;
+
         const ymData = await this.formatToYMData(payData);
+
         if(ymData.length == 0) return;
+
         await new YandexMetrikaService().sendSimpleOrders(ymData);
     }
 
     private async formatToYMData(payData: PayResponseItems[]): Promise<YMSendSimpleOrdersData[]>{
-        const filterPay = payData.filter((p: PayResponseItems) =>  p.customer_id !== null)
+
+        const filterPay = payData.filter((p: PayResponseItems) =>  p.customer_id !== null);
+
         if(filterPay.length == 0) return [];
+
         const ymData: YMSendSimpleOrdersData[]= [];
+
         for(const pay of filterPay){
+
             const customer = await this.alfaService.getCustomerById(pay.customer_id);
+
             if(customer.length == 0) continue;
-            ymData.push(this.formatToYM(pay, customer[0]))
-        }
+
+            ymData.push(this.formatToYM(pay, customer[0]));
+
+        };
+
         return ymData;
     }
 
@@ -35,7 +49,7 @@ export class AppService {
         return {
             id: String(pay.id),
             create_date_time: pay.document_date,
-            client_ids: (/^\d+\nFormID:/.test(customer.note)) ? customer.note.split('\n')[0] : '',
+            client_ids: (/^\d+\r\nFormID:/.test(customer.note)) ? customer.note.split('\r\n')[0] : '',
             ...(customer.email.length != 0)? { emails: customer.email.join(',') } : {},
             ...(customer.phone.length != 0)? { phones: customer.phone.map((p: string) => p.replace(/\D/g, '')).join(','), } : {},
             client_uniq_id: `alfa_${customer.id}`,

@@ -29,8 +29,11 @@ export class AlfaCrm {
 
     public async request<T>(urlPath: string, data: {[key: string]: any}): Promise<T>{
         try{
+
             const response =  await axios.post<LoginresponseData>(urlPath, data, { headers: this.header });
-            return response.data as T
+
+            return response.data as T;
+            
         }catch(e){
             throw e;
         }

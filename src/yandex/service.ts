@@ -10,15 +10,22 @@ export class YandexMetrikaService {
     private readonly ym: YandexMetrika = new YandexMetrika();
 
     public async sendSimpleOrders(data: YMSendSimpleOrdersData[]){
-        const csvFileName = `ym-${moment().format('DD.MM.YYYY')}.csv`;        
+
+        const csvFileName = `ym-${moment().format('DD.MM.YYYY')}.csv`; 
+
         await this.toCSV(data, csvFileName);
+
         const formData = this.formData(csvFileName);
+
         await this.ym.request(formData)
     }
 
     private formData(fileName: string): FormData {
+
         const form = new FormData();
+
         form.append('file', fs.createReadStream(`${join(__dirname, '../../files/')}${fileName}`), { filename: fileName });
+
         return form;
       
     }
